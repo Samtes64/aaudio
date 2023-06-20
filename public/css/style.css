@@ -224,7 +224,14 @@ input {
   
 }
 .account{
-  background: white;
+  background: rgb(73, 73, 73);
+  padding: 5%;
+  border-radius: 10px;
   
+  
+}
+.account h1{
+  margin-bottom: 10px;
+  width: 100%;
 }
 

@@ -18,8 +18,8 @@ if (isset($_GET['submit']) ) {
             <div class="accounts">
                 <?php while($user = mysqli_fetch_assoc($users)) : ?>
                 <div class="account">
-                    <h1><?=$user['firstname']?></h1>
-                    <button class="btn btn-secondary">Follow</button>
+                    <h1><?=$user['username']?></h1>
+                    <a class="btn btn-secondary" href="follow.php?id=<?=$user['id']?>">Follow</a>
                 </div>
                 <?php endwhile?>
 

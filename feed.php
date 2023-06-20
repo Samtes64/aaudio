@@ -1,31 +1,6 @@
 <?php include 'config/db.php'; ?>
 
 
-<?php
-
-
-if (isset($_POST['search'])) {
-    // Sanitize and retrieve the search query
-    $searchQuery = filter_var($_POST['searchQuery'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-
-
-    // SQL query to search for users
-    $sql = "SELECT * FROM users WHERE username LIKE '%$searchQuery%'";
-
-    // Execute the query
-    $result = mysqli_query($connection, $sql);
-    $users_searched = '';
-var_dump(mysqli_fetch_assoc($result));
-    
-    // Check if any results were found
-    if (mysqli_num_rows($result) > 0) {
-        $users_searched = mysqli_fetch_assoc($result);
-    } else {
-    }
-
-    // Free the result set
-}
-?>
 
 
 <section class="home">
@@ -39,20 +14,39 @@ var_dump(mysqli_fetch_assoc($result));
             <button type="submit" name="submit" class="btn btn-secondary">Search</button>
         </form>
 
-        
+
         <div class="feed">
             <div class="accounts">
-                <?php $Query = "SELECT * from users";
-                $users = mysqli_query($connection,$Query);
+
+                <?php
+                $userid = $_COOKIE['user_id'];
+                $query = "SELECT * FROM user_relationship as ur JOIN audio as a ON ur.following_id = a.user_id WHERE follower_id=$userid";
+
+                $posts = mysqli_query($connection, $query);
+                
                 ?>
 
-                <?php while ($user = mysqli_fetch_assoc($users)) : ?>
-                
-                <div class="account">
-                    <h1><?=$user['firstname']?></h1>
-                    <button class="btn btn-secondary">Follow</button>
-                </div>
-                    <?php endwhile?>
+                <?php foreach ($posts as $row) {
+                    $id = $row['id'];
+                    $audioURL = $row['audio_url'];
+                    $coverImage = $row['cover_image'];
+                    $title = $row['title'];
+                    $description = $row['description'];
+
+                    // Display the audio post card
+                    echo '<div class="audio-card">';
+                    // echo '<img src="' . $coverImage . '" alt="Cover Image">';
+                    echo "<div style='background:#0d2a4b; display:flex; justify-content:space-between;'>";
+                    echo    '<h2>' . $title . '</h2>';
+                    echo    "<a href='/deletePost.php?id=$id' style='color:white; padding:8px; background:red; border-radius:8px;'> Delete </a>";
+                    echo '</div>';
+                    echo '<p>' . $description . '</p>';
+                    echo '<audio controls>';
+                    echo '<source src="' . $audioURL . '" type="audio/mpeg">';
+                    echo 'Your browser does not support the audio tag.';
+                    echo '</audio>';
+                    echo '</div>';
+                } ?>
 
             </div>
         </div>
